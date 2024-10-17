@@ -18,6 +18,7 @@
                     <th>Writer</th>
                     <th>Publisher</th>
                     <th>Action</th>
+                    <th>Sort order</th>
                 </tr>
             </thead>
             <tbody>
@@ -32,15 +33,24 @@
                         <td>{{ $book->stock_amount }}</td>
                         <td>{{ $book->writer->name }}</td>
                         <td>{{ $book->publisher->name }}</td>
-                        <td>
-                            <a href="{{ route('books.edit', $book->id) }}" class="btn btn-sm btn-primary">Edit</a>
-                            <form action="{{ route('books.reOrder', $book) }}" method="POST">
-                                @csrf
-                                <input type="number" name="up" placeholder="Up">
-                                <input type="number" name="down" placeholder="Down">
-                                <button type="submit">Move</button>
-                            </form>
-                        </td>
+                        @if($book->stock_amount > 0)
+                            <td>
+                                <a href="{{ route('books.edit', $book->id) }}" class="btn btn-sm btn-primary">Edit</a>
+                                <form action="{{ route('books.reOrder', $book) }}" method="POST">
+                                    @csrf
+                                    @if($book->sort_order < \App\Models\Book::query()->max('sort_order'))
+                                        <input type="number" min="1" max="{{ \App\Models\Book::query()->max('sort_order') - $book->sort_order }}" name="up" placeholder="Up">
+                                    @endif
+
+                                    @if($book->sort_order > 1)
+                                        <input type="number" name="down" placeholder="Down">
+                                    @endif
+
+                                    <button type="submit">Move</button>
+                                </form>
+                            </td>
+                        @endif
+                        <td>{{ $book->sort_order }}</td>
                     </tr>
                 @endforeach
             </tbody>

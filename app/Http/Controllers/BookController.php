@@ -6,12 +6,13 @@ use App\Models\Book;
 use App\Models\Publisher;
 use App\Models\Writer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class BookController extends Controller
 {
     public function index()
     {
-        $books = Book::all();
+        $books = Book::query()->orderByDesc('sort_order')->get();
         return view('books.index', compact('books'));
     }
 
@@ -31,7 +32,7 @@ class BookController extends Controller
     /**
      * Store a newly created book in the database.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
@@ -67,7 +68,7 @@ class BookController extends Controller
     /**
      * Show the form for editing the specified book.
      *
-     * @param  \App\Models\Book  $book
+     * @param \App\Models\Book $book
      * @return \Illuminate\View\View
      */
     public function edit(Book $book)
@@ -81,8 +82,8 @@ class BookController extends Controller
     /**
      * Update the specified book in the database.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Book  $book
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Book $book
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, Book $book)
@@ -118,15 +119,42 @@ class BookController extends Controller
     /**
      * Reorder the books.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Book  $book
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Book $book
      *
      * @return \Illuminate\Http\RedirectResponse
      */
     public function reOrder(Request $request, Book $book)
     {
-        throw new \Exception('Not implemented yet');
+        if($book->stock_amount < 1)
+        {
+            return redirect()->back();
+        }
 
-        return redirect()->route('books.index');
+        $request->validate([
+            'up' => 'nullable|integer|min:1',
+            'down' => 'nullable|integer|min:1',
+        ]);
+
+        $up = $request->input('up');
+        $down = $request->input('down');
+
+        $direction = $request->input('up') !== null ? 'up' : 'down';
+
+        if ($direction === 'up') {
+            $newRank = $book->sort_order + $up;
+
+            $book->sort_order = $newRank;
+            $book->save();
+        }
+
+        if ($direction === 'down') {
+            $newRank = $book->sort_order - $down;
+
+            $book->sort_order = $newRank;
+            $book->save();
+        }
+
+        return redirect()->back()->with('success', 'Book sorted successfully.');
     }
 }
