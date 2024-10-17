@@ -131,13 +131,13 @@ class BookController extends Controller
             return redirect()->back();
         }
 
-        $request->validate([
-            'up' => 'nullable|integer|min:1',
-            'down' => 'nullable|integer|min:1',
-        ]);
-
         $up = $request->input('up');
         $down = $request->input('down');
+
+        if($up && $down)
+        {
+            return redirect()->back();
+        }
 
         $direction = $request->input('up') !== null ? 'up' : 'down';
 
