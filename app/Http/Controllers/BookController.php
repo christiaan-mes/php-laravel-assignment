@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\BookRepository;
 use App\Models\Book;
 use App\Models\Publisher;
 use App\Models\Writer;
@@ -34,7 +35,7 @@ class BookController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(Request $request, BookRepository $repository)
     {
         $request->validate([
             'title' => 'required|string|max:255',
@@ -43,20 +44,14 @@ class BookController extends Controller
             'price' => 'required|numeric|min:0',
             'genre' => 'required|string|max:255',
             'subgenre' => 'required|string|max:255',
-            'writer_id' => 'required|exists:writers,id',
-            'publisher_id' => 'required|exists:publishers,id',
+            'writer_id' => 'nullable|exists:writers,id',
+            'writer_name' => 'nullable|string|max:255',
+            'publisher_id' => 'nullable|exists:publishers,id',
+            'publisher_name' => 'nullable|string|max:255',
+            'publisher_location' => 'nullable|string|max:255',
         ]);
 
-        Book::create([
-            'title' => $request->input('title'),
-            'ISBN' => $request->input('ISBN'),
-            'publication_year' => $request->input('publication_year'),
-            'price' => $request->input('price'),
-            'genre' => $request->input('genre'),
-            'subgenre' => $request->input('subgenre'),
-            'writer_id' => $request->input('writer_id'),
-            'publisher_id' => $request->input('publisher_id'),
-        ]);
+        $repository->storeBookWithRelations($request->all());
 
         return redirect()->route('books.index');
     }

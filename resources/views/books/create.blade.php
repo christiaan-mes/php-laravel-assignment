@@ -39,7 +39,8 @@
 
             <div class="form-group">
                 <label for="writer_id">Writer:</label>
-                <select name="writer_id" id="writer_id" class="form-control" required>
+                <select name="writer_id" id="writer_id" class="form-control">
+                    <option value="">Select a writer</option>
                     @foreach ($writers as $writer)
                         <option value="{{ $writer->id }}">{{ $writer->name }}</option>
                     @endforeach
@@ -47,12 +48,28 @@
             </div>
 
             <div class="form-group">
+                <label for="writer_name">Writer Name:</label>
+                <input type="text" name="writer_name" id="writer_name" class="form-control">
+            </div>
+
+            <div class="form-group">
                 <label for="publisher_id">Publisher:</label>
-                <select name="publisher_id" id="publisher_id" class="form-control" required>
+                <select name="publisher_id" id="publisher_id" class="form-control">
+                    <option value="">Select a publisher</option>
                     @foreach ($publishers as $publisher)
                         <option value="{{ $publisher->id }}">{{ $publisher->name }}</option>
                     @endforeach
                 </select>
+            </div>
+
+            <div class="form-group">
+                <label for="publisher_name">Publisher Name:</label>
+                <input type="text" name="publisher_name" id="publisher_name" class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label for="publisher_location">Publisher Location:</label>
+                <input type="text" name="publisher_location" id="publisher_location" class="form-control">
             </div>
 
             <button type="submit" class="btn btn-primary">Create</button>
