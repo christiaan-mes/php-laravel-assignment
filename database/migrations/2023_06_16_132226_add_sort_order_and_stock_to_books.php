@@ -14,8 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::table('books', function (Blueprint $table) {
-            $table->integer('sort_order')->after('subgenre');
-            $table->integer('stock_amount')->after('sort_order');
+            $table->integer('sort_order')->default(-1)->index()->after('subgenre');
+            $table->integer('stock_amount')->default(0)->index()->after('sort_order');
         });
     }
 

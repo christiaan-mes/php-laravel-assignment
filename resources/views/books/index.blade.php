@@ -43,7 +43,7 @@
                                     @endif
 
                                     @if($book->sort_order > 1)
-                                        <input type="number" name="down" placeholder="Down">
+                                        <input type="number" name="down" min="1" max="{{ $book->sort_order - 1 }}" placeholder="Down">
                                     @endif
 
                                     <button type="submit">Move</button>

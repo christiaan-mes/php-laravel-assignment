@@ -26,6 +26,10 @@ class Book extends Model
 
     protected $guarded = [];
 
+    protected $attributes = [
+        'sort_order' => -1,
+    ];
+
     /**
      * Get the writer associated with the book.
      */

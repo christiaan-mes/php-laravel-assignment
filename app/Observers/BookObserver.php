@@ -18,10 +18,6 @@ class BookObserver
             return;
         }
 
-        if (is_null($book->sort_order)) {
-            $book->sort_order = Book::query()->max('sort_order');
-        }
-
         if ($book->getOriginal('sort_order') > $book->sort_order) {
             $sortOrderRange = [
                 $book->sort_order, $book->getOriginal('sort_order')
@@ -32,17 +28,17 @@ class BookObserver
             ];
         }
 
-        $lowerPositionBooks = Book::query()->where('id', '!=', $book->id)
+        $otherBooks = Book::query()->where('id', '!=', $book->id)
             ->whereBetween('sort_order', $sortOrderRange)
             ->get();
 
-        foreach ($lowerPositionBooks as $lowerPositionBook) {
+        foreach ($otherBooks as $otherBook) {
             if ($book->getOriginal('sort_order') < $book->sort_order) {
-                $lowerPositionBook->sort_order--;
+                $otherBook->sort_order--;
             } else {
-                $lowerPositionBook->sort_order++;
+                $otherBook->sort_order++;
             }
-            $lowerPositionBook->saveQuietly();
+            $otherBook->saveQuietly();
         }
     }
 }
