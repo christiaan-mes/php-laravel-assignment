@@ -38,6 +38,11 @@
             </div>
 
             <div class="form-group">
+                <label for="stock_amount">Stock Amount:</label>
+                <input type="number" name="stock_amount" id="stock_amount" class="form-control" value="0">
+            </div>
+
+            <div class="form-group">
                 <label for="writer_id">Writer:</label>
                 <select name="writer_id" id="writer_id" class="form-control" required>
                     @foreach ($writers as $writer)

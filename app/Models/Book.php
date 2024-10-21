@@ -13,6 +13,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property float $price
  * @property string $genre
  * @property string $subgenre
+ * @property int $sort_order
+ * @property int $stock_amount
  * @property int $writer_id
  * @property int $publisher_id
  * @property \Carbon\Carbon $created_at
@@ -23,6 +25,10 @@ class Book extends Model
     use HasFactory;
 
     protected $guarded = [];
+
+    protected $attributes = [
+        'sort_order' => -1,
+    ];
 
     /**
      * Get the writer associated with the book.

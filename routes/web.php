@@ -35,3 +35,4 @@ Route::get('/books/create', [\App\Http\Controllers\BookController::class, 'creat
 Route::post('/books', [\App\Http\Controllers\BookController::class, 'store'])->name('books.store');
 Route::get('/books/{book}/edit', [\App\Http\Controllers\BookController::class, 'edit'])->name('books.edit');
 Route::put('/books/{book}', [\App\Http\Controllers\BookController::class, 'update'])->name('books.update');
+Route::post('/books/{book}/reorder', [\App\Http\Controllers\BookController::class, 'reOrder'])->name('books.reOrder');

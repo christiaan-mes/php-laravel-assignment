@@ -23,6 +23,8 @@ class BookFactory extends Factory
             'price' => $this->faker->randomFloat(2, 10, 100),
             'genre' => $this->randomGenre(),
             'subgenre' => $this->randomSubGenre(),
+            'sort_order' => -1,
+            'stock_amount' => $this->faker->numberBetween(0, 10) < 8 ? $this->faker->numberBetween(0, 100) : 0,
         ];
     }
 
